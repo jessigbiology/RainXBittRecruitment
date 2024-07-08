@@ -1,2 +1,2 @@
 ## Table of Assets
-ESA 2024 Poster
+Digital Poster: RecordRainfallPoster-GrausteinChenYe.pdf
