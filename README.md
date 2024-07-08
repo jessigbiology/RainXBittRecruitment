@@ -9,3 +9,7 @@ _Celastrus orbiculatus Thun._ (Oriental Bittersweet) is an invasive liana that g
 ### Table of Contents
 **Assets Folder** \
 Digital Poster: [RecordRainfallPoster-GrausteinChenYe.pdf](https://github.com/jessigbiology/RainXBittRecruitment/blob/b6e872e007dd34c2566d11b0484fc8f331c19ec0/assets/RecordRainfallPoster-GrausteinChenYe.pdf)
+
+**Data_RScripts Folder** \
+Variable Glossary: [VariableGlossary.md](https://github.com/jessigbiology/RainXBittRecruitment/blob/fd0da9f5fa2daf3c51fe30567163aa90d2c4615d/Data_RScripts/VariableGlossary.md) \
+Recruitment Summary Data: [VinesXYr-Climate.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/fd0da9f5fa2daf3c51fe30567163aa90d2c4615d/Data_RScripts/VinesXYr-Climate.csv)
