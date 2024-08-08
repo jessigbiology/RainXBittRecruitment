@@ -1,0 +1,243 @@
+---
+title: "Rain x Bittersweet Analysis R Scripts"
+author: "Jessica S. Graustein"
+date: "2024-06-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(weathermetrics)
+library(pollen)
+library(ggplot2)
+library(tidyr)
+library(plotrix)
+```
+
+## Converting NOAA Weather Data to Metric
+
+The NOAA database I pulled data from for calculating Growing Degree Days records temperatures in Celsius and precipitation in inches. However, working in metric units is best for scientific analysis. Below is my attempt to find an efficient workflow for conversion of this data.
+
+```{r}
+Weather1323 <- read.csv("DailyWeather_2013-2023.csv", header = TRUE)
+Weather1323$date_met <- as_date(Weather1323$Date)
+Weather1323$MaxTemp <- as.numeric(Weather1323$MaxTemp)
+Weather1323$MinTemp <- as.numeric(Weather1323$MinTemp)
+Weather1323$Precip <- as.numeric(Weather1323$Precip)
+Weather1323$maxt <- convert_temperature(Weather1323$MaxTemp, old_metric = "f", new_metric = "c")
+Weather1323$mint <- convert_temperature(Weather1323$MinTemp, old_metric = "f", new_metric = "c")
+Weather1323$PrecipMM <- convert_precip(Weather1323$Precip, old_metric = "inches", new_metric = "mm")
+summary(Weather1323)
+
+```
+
+```{r}
+
+TEMP1323 <- subset(Weather1323, select = c(date_met, maxt, mint))
+
+GDD1323 <- na.omit(TEMP1323)
+GDD1323
+
+```
+
+```{r}
+
+summary(GDD1323)
+
+```
+
+
+
+
+```{r}
+#Using `pollen` package (which requires `tidyr` and `ggplot2`). This allows me to set the best gdd formula for calculations, rather than the set formula in `cropgrowdays` which doesn't set the gdd to 0 for any day the Tmin falls below Tbase.
+
+GDD2013 <- subset(GDD1323, date_met > "2013-03-01" & date_met < "2013-10-31")
+GDD2014 <- subset(GDD1323, date_met > "2014-03-01" & date_met < "2014-10-31")
+GDD2015 <- subset(GDD1323, date_met > "2015-03-01" & date_met < "2015-10-31")
+GDD2016 <- subset(GDD1323, date_met > "2016-03-01" & date_met < "2016-10-31")
+GDD2017 <- subset(GDD1323, date_met > "2017-03-01" & date_met < "2017-10-31")
+GDD2018 <- subset(GDD1323, date_met > "2018-03-01" & date_met < "2018-10-31")
+GDD2019 <- subset(GDD1323, date_met > "2019-03-01" & date_met < "2019-10-31")
+GDD2020 <- subset(GDD1323, date_met > "2020-03-01" & date_met < "2020-10-31")
+GDD2021 <- subset(GDD1323, date_met > "2021-03-01" & date_met < "2021-10-31")
+GDD2022 <- subset(GDD1323, date_met > "2022-03-01" & date_met < "2022-10-31")
+GDD2023 <- subset(GDD1323, date_met > "2023-03-01" & date_met < "2023-10-31")
+```
+
+```{r}
+
+#Calculates gdd for each date and adds to the value from the previous date
+GDD2013$GDD13 <- gdd(tmax = GDD2013$maxt, tmin = GDD2013$mint, tbase = 0,  tbase_max = 40, type = "D")
+
+#displays dataframe
+GDD2013
+
+GDD2014$GDD14 <- gdd(tmax = GDD2014$maxt, tmin = GDD2014$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2014
+
+GDD2015$GDD15 <- gdd(tmax = GDD2015$maxt, tmin = GDD2015$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2015
+
+
+GDD2016$GDD16 <- gdd(tmax = GDD2016$maxt, tmin = GDD2016$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2016
+
+GDD2017$GDD17 <- gdd(tmax = GDD2017$maxt, tmin = GDD2017$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2017
+
+GDD2018$GDD18 <- gdd(tmax = GDD2018$maxt, tmin = GDD2018$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2018
+
+GDD2019$GDD19 <- gdd(tmax = GDD2019$maxt, tmin = GDD2019$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2019
+
+GDD2020$GDD20 <- gdd(tmax = GDD2020$maxt, tmin = GDD2020$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2020
+
+GDD2021$GDD21 <- gdd(tmax = GDD2021$maxt, tmin = GDD2021$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2021
+
+GDD2022$GDD22 <- gdd(tmax = GDD2022$maxt, tmin = GDD2022$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2022
+
+GDD2023$GDD23 <- gdd(tmax = GDD2023$maxt, tmin = GDD2023$mint, tbase = 0,  tbase_max = 40, type = "D")
+GDD2023
+
+
+
+#Still need to work out how to divide this by years
+#Also need to figure out how to get the rest of the columns named and showing their values.
+
+```
+
+
+## Creating a 3 axis plot to look for patterns of recruitment and rainfall from 2013-2023
+
+```{r}
+GDDxYear <- read.csv("GDDPrecipRecruit_2013-2023.csv", header = TRUE)
+# Value used to transform the data
+coeff <- 10
+
+# A few constants
+vineColor <- "#75112E"
+precipColor <- "#2E7488"
+  
+  # To set PCA colors, use pattern like: rgb(0.2, 0.6, 0.9, 1)
+
+ggplot(GDDxYear, aes(x=Year)) +
+  
+  geom_line( aes(y=NewVines), linewidth=1, color=vineColor) + 
+  geom_point(aes(y=NewVines), color=vineColor, size=2) +
+  geom_segment(x=2012.5, y=10, xend=2023.5, color="#D3c298") +
+  geom_line( aes(y=PrecipCM / coeff), linewidth=1, color=precipColor) +
+  geom_point(aes(y=PrecipCM / coeff), color=precipColor, shape=6, size=2 ) +
+  
+  scale_x_continuous(n.breaks=11) +
+  scale_y_continuous(
+    
+    # Features of the first axis
+    name = "Number of New Vines",
+    
+    # Add a second axis and specify its features
+    sec.axis = sec_axis(~.*coeff, name="Growing Season Precipitation (cm)")
+  ) + 
+  
+  theme_linedraw() +
+
+  theme(plot.title = element_text(hjust = 0.5),
+    axis.title.y = element_text(color = vineColor, size=13),
+    axis.title.y.right = element_text(color = precipColor, size=13),
+        panel.grid.major = element_line(color = "#D3c298",
+                                        size = 0.5,
+                                        linetype = 3)
+  ) +
+
+  ggtitle("Recruitment of Oriental Bittersweet\n and Precipitation from 2013-2023")
+
+```
+
+## Plotting the Effect of Rain on Recruitment
+
+```{r}
+# The `geom_smooth` function draws a regression line on the scatterplot made by `geom_point`. 
+# The `method = "lm"` is what makes the line straight instead of curving to follow the points. In that statement, if you said `se = FALSE` then the confidence interval would go away.
+# Thank you https://bookdown.org/dli/rguide/scatterplots-and-best-fit-lines-two-sets.html for the tutorial.
+
+ggplot(GDDxYear, aes(x=GDD, y=NewVines)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+
+```
+
+## Looking for correlation between rainfall and Growing Degree Days
+
+```{r}
+ggplot(GDDxYear, aes(x=PrecipCM, y=GDD)) + 
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# The output of this graph lets us say (if anyone asks about GDD): "For this investigation, GDD and cm of Precipitation were not significantly correlated in my small sample size." 
+
+
+```
+
+
+## Plotting distribution of the number of new lianas (bimodal distribution) and precipitation (normal distribution)
+
+```{r}
+NewVine_hist <- ggplot(GDDxYear, aes(x=NewVines)) + geom_histogram(binwidth = 2) + labs(x = "Number of New Lianas")
+NewVine_hist
+
+Precip_hist <- ggplot(GDDxYear, aes(x=PrecipCM)) + geom_histogram(binwidth = 10) + labs(x = "Growing Season Precipitation (cm)")
+Precip_hist
+
+ggsave(filename = "NewVineHistogram.png", plot = NewVine_hist, width = 5, height = 3, units = "in", dpi = 1200)
+
+ggsave(filename = "PrecipHistogram.png", plot = Precip_hist, width = 5, height = 3, units = "in", dpi = 1200)
+
+```
+
+## Calculating Standard Error of the Mean and Confidence Intervals
+
+```{r}
+# The `std.error` fucntion is in the `plotrix` package.
+# `SEnew` is the standard error of the mean for the `NewVines` variable.
+# `MEnew` is the margin of error for a 95% confidence interval with 10 degrees of freedom. (n=11, df=n-1)
+# The `qt` function calculates the t-score of the pth quantile of the Student t distribution. Note that the critical values found by qt will match the critical values found in the t-Distribution table as well as the critical values that can be found by the Inverse t-Distribution Calculator.
+# Thank you https://www.statology.org/working-with-the-student-t-distribution-in-r-dt-qt-pt-rt/ for the refresher course!
+
+SEnew <- std.error(GDDxYear$NewVines)
+MEnew <- qt(.975,10)*SEnew
+MEnew
+mean(GDDxYear$NewVines) - MEnew
+mean(GDDxYear$NewVines) + MEnew
+
+# So with the output of the previous three lines given below, Standard Error of the Mean is 2.738. The Confidence Interval is technically (-0.466, 5.011) [lower bound, upper bound] with a mean of 2.273 new vines per year in the sampled areas. However since there can't be negative new vines, a biologically-realistic way to word it is: "We are 95% confident that the mean number of new vines grown per year in the sampled areas is somewhere between 0 and 5." 
+
+# Thank you https://online.stat.psu.edu/stat200/lesson/4/4.2/4.2.1 for the refresher course!
+```
+
+```{r}
+SEgdd <- std.error(GDDxYear$GDD)
+MEgdd <- qt(.975,10)*SEgdd
+MEgdd
+mean(GDDxYear$GDD) - MEgdd
+mean(GDDxYear$GDD) + MEgdd
+
+# So with the output of the previous three lines given below, Standard Error of the Mean is 77.544 and the Confidence Interval is (3440.190, 3595.278) [lower bound, upper bound] with a mean of 3518 Growing Degree Days for Oriental Bittersweet in the Dover-Durham area. The way to word it is: "We are 95% confident that the mean annual Growing Degree Days for Oriental Bittersweet on the PCA campus is somewhere between 3440 and 3595." 
+```
+
+```{r}
+SEpre <- std.error(GDDxYear$PrecipCM)
+MEpre <- qt(.975,10)*SEpre
+MEpre
+mean(GDDxYear$PrecipCM) - MEpre
+mean(GDDxYear$PrecipCM) + MEpre
+
+# So with the output of the previous three lines given below, Standard Error of the Mean is 9.669 and the Confidence Interval is (67.460, 86.798) [lower bound, upper bound] with a mean of 77.13 cm precipitation during the growing season. The way to word it is: "We are 95% confident that the mean precipitation during the growing season on the PCA campus is somewhere between 67.5 cm and 86.8 cm."
+
+```
+
+
