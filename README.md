@@ -8,8 +8,14 @@ _Celastrus orbiculatus Thun._ (Oriental Bittersweet) is an invasive liana that g
 
 ### Table of Contents
 **Assets Folder** \
-Digital Poster: [RecordRainfallPoster-GrausteinChenYe.pdf](https://github.com/jessigbiology/RainXBittRecruitment/blob/b6e872e007dd34c2566d11b0484fc8f331c19ec0/assets/RecordRainfallPoster-GrausteinChenYe.pdf)
+Digital Poster: [RecordRainfallPoster-GrausteinChenYe.pdf](https://github.com/jessigbiology/RainXBittRecruitment/blob/b6e872e007dd34c2566d11b0484fc8f331c19ec0/assets/RecordRainfallPoster-GrausteinChenYe.pdf)\
+PNG Image: [Snapped Sapling](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/assets/Bittersweet-snappedSappling.jpg)\
+PNG Image: [Spring Bittersweet](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/assets/SpringBittersweet-2024.jpg)
 
 **Data_RScripts Folder** \
 Variable Glossary: [VariableGlossary.md](https://github.com/jessigbiology/RainXBittRecruitment/blob/fd0da9f5fa2daf3c51fe30567163aa90d2c4615d/Data_RScripts/VariableGlossary.md) \
-Recruitment Summary Data: [VinesXYr-Climate.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/fd0da9f5fa2daf3c51fe30567163aa90d2c4615d/Data_RScripts/VinesXYr-Climate.csv)
+Recruitment Summary Data: [VinesXYr-Climate.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/fd0da9f5fa2daf3c51fe30567163aa90d2c4615d/Data_RScripts/VinesXYr-Climate.csv)\
+Bittersweet Transect Data: [Bittersweet-TransectData-2023.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/Data_RScripts/Bittersweet-TransectData-2023.csv)\
+Coordinates for sampled Bittersweet: [BittersweetCoordinates-DataWrap.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/Data_RScripts/BittersweetCoordinates-DataWrap.csv)\
+Weather data for calculating Growing Degree Days: [DailyWeather_2013-2023.csv](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/Data_RScripts/DailyWeather_2013-2023.csv)\
+R Scripts for Analysis and Plots: [Graustein_ESAPosterScripts.Rmd](https://github.com/jessigbiology/RainXBittRecruitment/blob/bbdf050ff119ebd49e371fe6c08638338a64eedc/Data_RScripts/Graustein_ESAPosterScripts.Rmd)
